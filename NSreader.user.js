@@ -233,7 +233,14 @@ var issue_viewing = (function () {
 			elem = iframeContentDocument.getElementsByClassName('cover-article');
 			elem[0].parentNode.removeChild(elem[0]);
 		}
-//		jQuery(iframeContentDocument.getElementsByClassName('previous-article')).find('a').onclick = openLink;
+		
+		// Article Links management
+        var articleLinks = iframeContentDocument.getElementsByTagName('a');
+        for (var j=0; j < articleLinks.length; j++) {
+        	if(articleLinks[j] !== undefined) {
+        		articleLinks[j].setAttribute('target', '_blank');
+        	}            
+        }
     },
         
     openLink = function() {
@@ -285,7 +292,7 @@ var issue_viewing = (function () {
         iframe_article = createIframe("content-frame", "68%", '95%');
         iframe_article.style.float = "right";
         iframe_article.style.borderLeft = "3px black solid";
-        document.body.appendChild(iframe_article);
+        document.body.appendChild(iframe_article);     
         
         // TOC Load 1st Link      
         getNextPage(iframe_article, links[0].href, processLink);
