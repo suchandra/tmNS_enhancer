@@ -210,6 +210,7 @@ var issue_viewing = (function () {
         iframeContentDocument.head.innerHTML = '' +
         	"<link href='//fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic|PT+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>"+
             '<link rel="canonical" href="https://www.newscientist.com/issue/" />'+
+            "<link rel='stylesheet' id='all-css-1' href='https://www.newscientist.com/_static/??-eJydj0FSwzAMRS+EohYyw2TBcBbjqKmCYhtLJeT2KKQdFhAWbGxJ89/XF84FYk5GybDIZeCkmBSGIEJ1wVFRhXuqWPMSZKubqHqHv4DKRrmy11BCIlF0JZ6qy3aZ72Vw3eRffN3e/1FgZ5roL3ZjYOZ+INtShsRTsH2qkpaclN8JhIezveQPDKorfgopLms/vl08UXPr4dg8NO2u45xrX9zW4+TIQUCyz2+maya1RX4m+rrOz6AZNLJPWO0qnTit8ufp6dh2h+6x7e4P4yc0p7Yt' type='text/css' media='all'/>"+
             "<link rel='stylesheet' id='all-css-0' href='https://www.newscientist.com/_static/??-eJx1j81uAjEMhF+IxFpgQRwQj7JKE5M1yh+xU9i3b6hoL8BxPN/YHrgVZXMSTAIlNE+JIeFdPCblTQhYFyg1u2aFocxZsq1GaHoyELsV8D8zPTOTIy7BLMDSaftiVwxG0E0UjUfWlnkFbz4xzslMDN2H3KQ0+YhW5JIT0zeqQH6Wr3wHw4z97bNJdnnoy7X14/pPq0Fv9PZlo8wYfxvdFFvqE2LpPZaAOlJ64Kd4HLbjuFvvD8N4+QFFE3to' type='text/css' media='all' />"
         iframeContentDocument.body.innerHTML = '';
         iframeContentDocument.body.innerHTML = mc.outerHTML;
@@ -231,7 +232,7 @@ var issue_viewing = (function () {
 		}
 		if ( iframeContentDocument.getElementsByClassName('cover-article') !== null ) {
 			elem = iframeContentDocument.getElementsByClassName('cover-article');
-			if(elem[0].parentNode) {
+			if(elem[0] && elem[0].parentNode) {
 				elem[0].parentNode.removeChild(elem[0]);
 			}			
 		}
