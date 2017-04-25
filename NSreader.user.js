@@ -231,7 +231,9 @@ var issue_viewing = (function () {
 		}
 		if ( iframeContentDocument.getElementsByClassName('cover-article') !== null ) {
 			elem = iframeContentDocument.getElementsByClassName('cover-article');
-			elem[0].parentNode.removeChild(elem[0]);
+			if(elem[0].parentNode) {
+				elem[0].parentNode.removeChild(elem[0]);
+			}			
 		}
 		
 		// Article Links management
@@ -241,6 +243,12 @@ var issue_viewing = (function () {
         		articleLinks[j].setAttribute('target', '_blank');
         	}            
         }
+        
+        //hide ads
+       var signPost = iframeContentDocument.getElementsByClassName('signpost');
+	   signPost[0].parentNode.removeChild(signPost[0]);
+	   signPost = iframeContentDocument.getElementById('pre-footer');
+	   signPost.remove(signPost[0]);
     },
         
     openLink = function() {
