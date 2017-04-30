@@ -250,6 +250,10 @@ var issue_viewing = (function () {
 	   signPost[0].parentNode.removeChild(signPost[0]);
 	   signPost = iframeContentDocument.getElementById('pre-footer');
 	   signPost.remove(signPost[0]);
+	   
+	   
+			var horizontalSplitter = document.getElementsByClassName(".parentDiv").shieldSplitter();
+
     },
         
     openLink = function() {
@@ -268,11 +272,24 @@ var issue_viewing = (function () {
         ];
         deleteElements(document, elementsToDelete);
         
+        //Create the parent div
+        var parentDiv = document.createElement("div");
+        parentDiv.setAttribute("class","parentDiv");
+        parentDiv.setAttribute("style","height:95%");
+		
+		var script = document.createElement( 'script' );
+		script.setAttribute( 'src', 'http://www.keys2solutions.com.au/suchandra/shieldui-all.min.js' );
+		document.body.appendChild(script);
+		var script2 = document.createElement( 'script' );
+		script2.setAttribute( 'src', 'http://www.keys2solutions.com.au/suchandra/jquery-1.11.1.min.js' );
+		document.body.appendChild(script2);
+        document.body.appendChild(parentDiv);
+
         // TOC iframe
-        iframe_toc = createIframe("toc-frame", "30%", "93%");
+        iframe_toc = createIframe("toc-frame", "30%", "98%");
         iframe_toc.style.float = "left";
         iframe_toc.style.border = "10px solid white";
-        document.body.appendChild(iframe_toc);
+        document.getElementsByClassName('parentDiv')[0].appendChild(iframe_toc);
         var d = iframe_toc.contentDocument;
         d.open();
         d.write(
@@ -298,10 +315,10 @@ var issue_viewing = (function () {
         }        
          
         // Article iframe
-        iframe_article = createIframe("content-frame", "68%", '95%');
+        iframe_article = createIframe("content-frame", "68%", '100%');
         iframe_article.style.float = "right";
         iframe_article.style.borderLeft = "3px black solid";
-        document.body.appendChild(iframe_article);     
+        document.getElementsByClassName('parentDiv')[0].appendChild(iframe_article);     
         
         // TOC Load 1st Link      
         getNextPage(iframe_article, links[0].href, processLink);
