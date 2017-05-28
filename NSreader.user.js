@@ -11,7 +11,22 @@
 // @downloadURL  https://github.com/hakt0-r/tmNS_enhancer/raw/master/NSreader.User.js
 // @grant        unsafeWindow
 // @grant        GM_xmlhttpRequest
+// @require      http://www.keys2solutions.com.au/suchandra/shieldui-all.min.js
+// @resource     shield_css http://www.keys2solutions.com.au/suchandra/all.min.css
+// @resource     ranger_css http://www.keys2solutions.com.au/suchandra/ranger.css
+// @grant        GM_addStyle
+// @grant        GM_getResourceText
+
 // ==/UserScript==
+
+var jqUI_CssSrc = GM_getResourceText ("shield_css");
+var ranger_CssSrc = GM_getResourceText ("ranger_css");
+
+GM_addStyle (jqUI_CssSrc);
+GM_addStyle (ranger_CssSrc);
+
+
+
 'use strict';
 
 function createIframe(if_id, if_width, if_height) {
@@ -247,12 +262,13 @@ var issue_viewing = (function () {
         
         //hide ads
        var signPost = iframeContentDocument.getElementsByClassName('signpost');
-	   signPost[0].parentNode.removeChild(signPost[0]);
-	   signPost = iframeContentDocument.getElementById('pre-footer');
-	   signPost.remove(signPost[0]);
-	   
-	   
-			var horizontalSplitter = document.getElementsByClassName(".parentDiv").shieldSplitter();
+       if(signPost[0]) {
+           signPost[0].parentNode.removeChild(signPost[0]);
+           signPost = iframeContentDocument.getElementById('pre-footer');
+           signPost.remove(signPost[0]);
+       }
+        
+       var horizontalSplitter = jQuery(".parentDiv").shieldSplitter();
 
     },
         
@@ -275,21 +291,36 @@ var issue_viewing = (function () {
         //Create the parent div
         var parentDiv = document.createElement("div");
         parentDiv.setAttribute("class","parentDiv");
-        parentDiv.setAttribute("style","height:95%");
-		
-		var script = document.createElement( 'script' );
-		script.setAttribute( 'src', 'http://www.keys2solutions.com.au/suchandra/shieldui-all.min.js' );
-		document.body.appendChild(script);
-		var script2 = document.createElement( 'script' );
-		script2.setAttribute( 'src', 'http://www.keys2solutions.com.au/suchandra/jquery-1.11.1.min.js' );
-		document.body.appendChild(script2);
+        parentDiv.setAttribute("style","height:95%;border:none !important;top:0px !important");
         document.body.appendChild(parentDiv);
+        
+        //Create the left panel div
+        var leftPanelDiv = document.createElement("div");
+        leftPanelDiv.setAttribute("class","panel-left");
+        leftPanelDiv.setAttribute("style","height:95%");
+        document.getElementsByClassName('parentDiv')[0].appendChild(leftPanelDiv);
+        
+         var leftFormDiv = document.createElement("form");
+        leftFormDiv.setAttribute("class","slider-form-left");
+        document.getElementsByClassName('panel-left')[0].appendChild(leftFormDiv);
+        document.getElementsByClassName('slider-form-left')[0].innerHTML = '<input type="range" name="amountRange" min="12" max="20" value="12" id="left-slider"/><span class="left-slider"></span>px';
+
+        //Create the right panel div
+        var rightPanelDiv = document.createElement("div");
+        rightPanelDiv.setAttribute("class","panel-right");
+        rightPanelDiv.setAttribute("style","height:95%");
+        document.getElementsByClassName('parentDiv')[0].appendChild(rightPanelDiv);
+        
+        var rightFormDiv = document.createElement("form");
+        rightFormDiv.setAttribute("class","slider-form-right");
+        document.getElementsByClassName('panel-right')[0].appendChild(rightFormDiv);
+        document.getElementsByClassName('slider-form-right')[0].innerHTML = '<input type="range" name="amountRange" min="12" max="20" value="12" id="right-slider"/><span class="right-slider"></span>px';
 
         // TOC iframe
-        iframe_toc = createIframe("toc-frame", "30%", "98%");
+        iframe_toc = createIframe("toc-frame", "97%", "98%");
         iframe_toc.style.float = "left";
         iframe_toc.style.border = "10px solid white";
-        document.getElementsByClassName('parentDiv')[0].appendChild(iframe_toc);
+        document.getElementsByClassName('panel-left')[0].appendChild(iframe_toc);
         var d = iframe_toc.contentDocument;
         d.open();
         d.write(
@@ -315,20 +346,36 @@ var issue_viewing = (function () {
         }        
          
         // Article iframe
-        iframe_article = createIframe("content-frame", "68%", '100%');
+        iframe_article = createIframe("content-frame", "100%", '100%');
         iframe_article.style.float = "right";
         iframe_article.style.borderLeft = "3px black solid";
-        document.getElementsByClassName('parentDiv')[0].appendChild(iframe_article);     
+        document.getElementsByClassName('panel-right')[0].appendChild(iframe_article);
         
         // TOC Load 1st Link      
         getNextPage(iframe_article, links[0].href, processLink);
+        
+        jQuery('#left-slider').on('change',function(){
+            var val = jQuery(this).val();
+            jQuery('.left-slider').text(val);
+            var h3 = iframe_toc.contentDocument.getElementsByTagName('h3');
+            for (var i=0; i < h3.length; i++) {
+                h3[i].style['font-size'] = val+'px';
+            }
+        });
+        jQuery('#right-slider').on('change',function(){
+            var value = jQuery(this).val();
+            jQuery('.right-slider').text(value);
+            var p = iframe_article.contentDocument.getElementsByTagName('p');
+            for (var i=0; i < p.length; i++) {
+                p[i].style['font-size'] = value+'px';
+            }
+        });
     };
     
     return {
         init: init
     };
 }());
-
 
 if (document.getElementsByClassName('magazine-cover-teaser issue-new-magazine-cover-teaser').length == 1) {
     issue_viewing.init();
